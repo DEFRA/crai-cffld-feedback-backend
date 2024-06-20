@@ -70,6 +70,28 @@ const config = convict({
     nullable: true,
     default: null,
     env: 'CDP_HTTPS_PROXY'
+  },
+  aws: {
+    region: {
+      doc: 'AWS Region',
+      format: String,
+      default: 'eu-central-1',
+      env: 'AWS_REGION'
+    }
+  },
+  pg: {
+    database: {
+      doc: 'Postgres database',
+      format: String,
+      default: 'cffld-feedback',
+      env: 'PG_DATABASE'
+    },
+    port: {
+      doc: 'Postgres port',
+      format: 'port',
+      default: 5432,
+      env: 'PG_PORT'
+    }
   }
 })
 
