@@ -1,13 +1,13 @@
 import { getFeedbackHandler } from './controllers/feedback-controller'
 
-const feedback = {
+const metadata = {
   plugin: {
-    name: 'feedback',
+    name: 'metadata',
     register: async (server) => {
       server.route([
         {
-          method: 'POST',
-          path: '/feedback/uploads',
+          method: 'GET',
+          path: '/feedback/metadata',
           ...getFeedbackHandler
         }
       ])
@@ -15,4 +15,4 @@ const feedback = {
   }
 }
 
-export { feedback }
+export { metadata }
