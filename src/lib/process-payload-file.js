@@ -1,0 +1,11 @@
+async function processPayloadFile(payload) {
+  const chunks = []
+
+  for await (const chunk of payload) {
+    chunks.push(chunk)
+  }
+
+  return Buffer.concat(chunks)
+}
+
+export { processPayloadFile }
