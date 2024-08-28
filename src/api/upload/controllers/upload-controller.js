@@ -1,5 +1,5 @@
 import { processPayloadFile } from '~/src/lib/process-payload-file'
-import { addUploadMetadata, updateUploadMetadata } from '~/src/repos/upload-metadata'
+import { addUploadMetadata } from '~/src/repos/upload-metadata'
 import { parseFeedbackFile } from '~/src/services/feedback-parser/index'
 import { triageFeedback } from '~/src/services/triage/index'
 
@@ -9,7 +9,7 @@ const uploadFeedbackHandler = {
 
     const { db, comprehend } = request
 
-    const { id } = await addUploadMetadata(db, { status: 'RECIEVED' })
+    const { id } = await addUploadMetadata(db, { status: 'RECEIVED' })
 
     const feedback = await parseFeedbackFile(db, comprehend, id, buffer)
 

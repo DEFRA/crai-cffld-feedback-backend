@@ -180,7 +180,6 @@ async function triageFeedback(db, id, feedback) {
   }
 
   const status = errors.length > 0 ? 'WARNING' : 'TRIAGED'
-  
   await updateUploadMetadata(db, id, { status })
 
   return triaged

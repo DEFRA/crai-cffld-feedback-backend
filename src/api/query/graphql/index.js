@@ -1,10 +1,11 @@
 import { graphql } from 'graphql'
 
-import schema from './schema'
+import schema from '~/src/api/query/graphql/schema'
+import { getFeedback } from '~/src/repos/feedback'
 
 const rootValue = {
-  feedback: async (_args) => {
-    const feedback = [] // await getFeedback(args)
+  async feedback(args, context) {
+    const feedback = await getFeedback(context.db, args)
 
     return feedback.map((f) => ({
       ...f,
@@ -13,12 +14,15 @@ const rootValue = {
   }
 }
 
-const query = async (body) => {
+const query = async (db, body) => {
   try {
     const res = await graphql({
       schema,
       source: body,
-      rootValue
+      rootValue,
+      contextValue: {
+        db
+      }
     })
 
     return res

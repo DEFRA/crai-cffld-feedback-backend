@@ -2,9 +2,9 @@ version: '3.4'
 services:
   localstack:
     image: localstack/localstack:3.0.2
-    ports:
-      - '4566:4566' # LocalStack Gateway
-      - '4510-4559:4510-4559' # external services port range
+    # ports:
+    #   - '4566:4566' # LocalStack Gateway
+    #   - '4510-4559:4510-4559' # external services port range
     env_file:
       - '.env'
     environment:
@@ -36,7 +36,7 @@ services:
   crai-cffld-feedback-backend:
     build:
       target: development
-    image: crai-cffld-feedback-backend
+    image: crai-cffld-feedback-backend-development
     ports:
       - '3001:3000'
     links:

@@ -3,7 +3,10 @@ const collectionName = 'upload-metadata'
 async function addUploadMetadata(db, metadata) {
   const collection = db.collection(collectionName)
 
-  const inserted = await collection.insertOne(metadata)
+  const inserted = await collection.insertOne({
+    status: metadata.status,
+    created_on: new Date()
+  })
 
   return {
     id: inserted.insertedId,
@@ -26,10 +29,7 @@ async function updateUploadMetadata(db, id, metadata) {
     update.total_feedback = metadata.totalFeedback
   }
 
-  const updated = await collection.updateOne(
-    { _id: id },
-    { $set: update }
-  )
+  const updated = await collection.updateOne({ _id: id }, { $set: update })
 
   return updated
 }
@@ -43,7 +43,8 @@ async function listUploadMetadata(db) {
     id: upload._id,
     status: upload.status,
     totalRedacted: upload.total_redacted,
-    totalFeedback: upload.total_feedback
+    totalFeedback: upload.total_feedback,
+    createdOn: upload.created_on
   }))
 }
 
