@@ -1,5 +1,8 @@
-import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager"
-import { config } from "../config"
+import {
+  SecretsManagerClient,
+  GetSecretValueCommand
+} from '@aws-sdk/client-secrets-manager'
+import { config } from '../config'
 
 const secretsManager = new SecretsManagerClient({
   region: config.get('aws.region')

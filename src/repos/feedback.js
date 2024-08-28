@@ -1,45 +1,45 @@
-import { knex } from '~/src/config/db'
+const collectionName = 'feedback'
 
-const getFeedback = async (args) => {
-  try {
-    const feedback = knex('feedback').select('*')
+async function addFeedback(db, feedback) {
+  const collection = db.collection(collectionName)
 
-    if (args.from_date) {
-      feedback.where('date_time', '>=', args.from_date)
-    }
+  const inserted = collection.insertOne(feedback)
 
-    if (args.to_date) {
-      feedback.where('date_time', '<=', args.to_date)
-    }
-
-    if (args.categories) {
-      feedback.whereIn('category', args.categories)
-    }
-
-    if (args.sub_categories) {
-      feedback.whereIn('sub_category', args.sub_categories)
-    }
-
-    if (args.rating_summary) {
-      feedback.whereIn('rating_summary', args.rating_summary)
-    }
-
-    if (args.urgent) {
-      feedback.where('urgent', args.urgent)
-    }
-
-    if (args.embeddings) {
-      feedback.whereRaw(`(1 - (embedding <=> '[${args.embeddings}]')) > 0.4`)
-      feedback.orderByRaw(`(1 - (embedding <=> '[${args.embeddings}]')) DESC`)
-    }
-
-    const res = await feedback
-
-    return res
-  } catch (err) {
-    console.error(`Error getting feedback from db: ${err}`)
-    throw err
-  }
+  return inserted.insertedId
 }
 
-export { getFeedback }
+async function getFeedback(db, args) {
+  const collection = db.collection(collectionName)
+
+  const query = {}
+
+  if (args.from_date) {
+    query.date_time = { $gte: new Date(args.from_date) }
+  }
+
+  if (args.to_date) {
+    query.date_time = { ...query.date_time, $lte: new Date(args.to_date) }
+  }
+
+  if (args.categories) {
+    query.categories = { $in: args.categories }
+  }
+
+  if (args.sub_categories) {
+    query.sub_categories = { $in: args.sub_categories }
+  }
+
+  if (args.rating_summary) {
+    query.rating_summary = { $in: args.rating_summary }
+  }
+
+  if (args.urgent) {
+    query.urgent = args.urgent
+  }
+
+  const feedback = await collection.find(query).toArray()
+
+  return feedback
+}
+
+export { addFeedback, getFeedback }

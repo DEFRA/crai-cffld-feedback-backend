@@ -45,17 +45,19 @@ const config = convict({
     default: 'info',
     env: 'LOG_LEVEL'
   },
-  mongoUri: {
-    doc: 'URI for mongodb',
-    format: '*',
-    default: 'mongodb://127.0.0.1:27017/',
-    env: 'MONGO_URI'
-  },
-  mongoDatabase: {
-    doc: 'database for mongodb',
-    format: String,
-    default: 'crai-cffld-feedback-backend',
-    env: 'MONGO_DATABASE'
+  mongo: {
+    uri: {
+      doc: 'URI for mongodb',
+      format: '*',
+      default: 'mongodb://127.0.0.1:27017/',
+      env: 'MONGO_URI'
+    },
+    database: {
+      doc: 'database for mongodb',
+      format: String,
+      default: 'crai-cffld-feedback-backend',
+      env: 'MONGO_DATABASE'
+    }
   },
   httpProxy: {
     doc: 'HTTP Proxy',
@@ -75,22 +77,8 @@ const config = convict({
     region: {
       doc: 'AWS Region',
       format: String,
-      default: 'eu-central-1',
+      default: 'eu-west-2',
       env: 'AWS_REGION'
-    }
-  },
-  pg: {
-    database: {
-      doc: 'Postgres database',
-      format: String,
-      default: 'cffld-feedback',
-      env: 'PG_DATABASE'
-    },
-    port: {
-      doc: 'Postgres port',
-      format: 'port',
-      default: 5432,
-      env: 'PG_PORT'
     }
   }
 })

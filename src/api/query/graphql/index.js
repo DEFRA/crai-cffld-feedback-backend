@@ -1,16 +1,11 @@
 import { graphql } from 'graphql'
 
-import { embeddings } from '~/src/services/ai/bedrock'
+import schema from '~/src/api/query/graphql/schema'
 import { getFeedback } from '~/src/repos/feedback'
-import schema from './schema'
 
 const rootValue = {
-  feedback: async (args) => {
-    if (args.search) {
-      args.embeddings = await embeddings.embedQuery(args.search)
-    }
-
-    const feedback = await getFeedback(args)
+  async feedback(args, context) {
+    const feedback = await getFeedback(context.db, args)
 
     return feedback.map((f) => ({
       ...f,
@@ -19,12 +14,15 @@ const rootValue = {
   }
 }
 
-const query = async (body) => {
+const query = async (db, body) => {
   try {
     const res = await graphql({
       schema,
       source: body,
-      rootValue
+      rootValue,
+      contextValue: {
+        db
+      }
     })
 
     return res

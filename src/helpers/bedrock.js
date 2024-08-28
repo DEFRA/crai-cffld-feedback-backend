@@ -1,5 +1,4 @@
 import { BedrockChat } from '@langchain/community/chat_models/bedrock'
-const { BedrockEmbeddings } = require('@langchain/community/embeddings/bedrock')
 
 import { config } from '~/src/config'
 
@@ -13,9 +12,4 @@ const sonnet = new BedrockChat({
   region: config.get('aws.region')
 })
 
-const embeddings = new BedrockEmbeddings({
-  model: 'amazon.titan-embed-text-v1',
-  region: config.get('aws.region')
-})
-
-export { haiku, sonnet, embeddings }
+export { haiku, sonnet }

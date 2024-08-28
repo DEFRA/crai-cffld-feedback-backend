@@ -1,8 +1,9 @@
-import { getAllMetadata } from '~/src/repos/metadata'
+import { listUploadMetadata } from '~/src/repos/upload-metadata'
 
 const getFeedbackHandler = {
   handler: async (request, h) => {
-    const feedback = await getAllMetadata()
+    const feedback = await listUploadMetadata(request.db)
+
     return h.response(feedback).code(200)
   }
 }

@@ -1,11 +1,13 @@
 import path from 'path'
 import hapi from '@hapi/hapi'
 
-import { config } from '~/src/config'
-import { router } from '~/src/api/router'
-import { requestLogger } from '~/src/helpers/logging/request-logger'
-import { failAction } from '~/src/helpers/fail-action'
-import { secureContext } from '~/src/helpers/secure-context'
+import { config } from '~/src/config/index.js'
+import { router } from '~/src/api/router.js'
+import { requestLogger } from '~/src/helpers/logging/request-logger.js'
+import { mongoDb } from '~/src/helpers/mongodb.js'
+import { comprehend } from '~/src/helpers/comprehend.js'
+import { failAction } from '~/src/helpers/fail-action.js'
+import { secureContext } from '~/src/helpers/secure-context/index.js'
 
 const isProduction = config.get('isProduction')
 
@@ -40,11 +42,13 @@ async function createServer() {
 
   await server.register(requestLogger)
 
-  // if (isProduction) {
-  //   await server.register(secureContext)
-  // }
+  if (isProduction) {
+    await server.register(secureContext)
+  }
 
-  await server.register(router)
+  // The mongoDb plugin adds access to mongo by adding `db` to the server and request object.
+  // Also adds an instance of mongoClient to just the server object.
+  await server.register([mongoDb, router, comprehend])
 
   return server
 }
